@@ -145,16 +145,16 @@ function Navbar({ show }: { show: boolean }) {
       <div className={styles.left}>
         <div className={styles.logo}>
           <Logo />
-          <div className={styles['logo-name']}>Arco Pro</div>
+          <div className={styles['logo-name']}>数据实时监测与展示系统</div>
         </div>
       </div>
       <ul className={styles.right}>
-        <li>
+        {/*<li>
           <Input.Search
             className={styles.round}
             placeholder={t['navbar.search.placeholder']}
           />
-        </li>
+        </li>*/}
         <li>
           <Select
             triggerElement={<IconButton icon={<IconLanguage />} />}
@@ -176,11 +176,11 @@ function Navbar({ show }: { show: boolean }) {
             }}
           />
         </li>
-        <li>
+        {/*<li>
           <MessageBox>
             <IconButton icon={<IconNotification />} />
           </MessageBox>
-        </li>
+        </li>*/}
         <li>
           <Tooltip
             content={
@@ -195,7 +195,7 @@ function Navbar({ show }: { show: boolean }) {
             />
           </Tooltip>
         </li>
-        <Settings />
+        {/*<Settings />*/}
         {userInfo && (
           <li>
             <Dropdown droplist={droplist} position="br" disabled={userLoading}>

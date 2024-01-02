@@ -1,5 +1,5 @@
 import Mock from 'mockjs';
-import setupMock from '@/utils/setupMock';
+import setupMock from '../../../../utils/setupMock';
 
 setupMock({
   setup: () => {

@@ -43,7 +43,7 @@ export default function MyApp({
       case 'en-US':
         return enUS;
       default:
-        return enUS;
+        return zhCN;
     }
   }, [lang]);
 
@@ -110,6 +110,7 @@ export default function MyApp({
           type="image/x-icon"
           href="https://unpkg.byted-static.com/latest/byted/arco-config/assets/favicon.ico"
         />
+        <title>数据实时监测与展示系统</title>
       </Head>
       <ConfigProvider
         locale={locale}

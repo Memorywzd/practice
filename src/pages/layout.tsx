@@ -11,7 +11,7 @@ import {
   IconExclamationCircle,
   IconUser,
   IconMenuFold,
-  IconMenuUnfold,
+  IconMenuUnfold, IconHome, IconCommon, IconDownload,
 } from '@arco-design/web-react/icon';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -34,6 +34,16 @@ const Content = Layout.Content;
 
 function getIconFromKey(key) {
   switch (key) {
+    case 'welcome':
+      return <IconHome className={styles.icon} />;
+    case 'management':
+      return <IconCommon className={styles.icon} />;
+    case 'download':
+      return <IconDownload className={styles.icon} />;
+    case 'user':
+      return <IconUser className={styles.icon} />;
+
+
     case 'dashboard':
       return <IconDashboard className={styles.icon} />;
     case 'list':
@@ -48,8 +58,7 @@ function getIconFromKey(key) {
       return <IconCheckCircle className={styles.icon} />;
     case 'exception':
       return <IconExclamationCircle className={styles.icon} />;
-    case 'user':
-      return <IconUser className={styles.icon} />;
+
     default:
       return <div className={styles['icon-empty']} />;
   }

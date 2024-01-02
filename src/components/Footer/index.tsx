@@ -8,7 +8,7 @@ function Footer(props: FooterProps = {}) {
   const { className, ...restProps } = props;
   return (
     <Layout.Footer className={cs(styles.footer, className)} {...restProps}>
-      Arco Design Pro
+        数据实时监测与展示系统-前端子系统 ©2024 Created by Memorywzd using Arco Design Pro
     </Layout.Footer>
   );
 }

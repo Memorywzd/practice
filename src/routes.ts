@@ -1,5 +1,5 @@
-import auth, { AuthParams } from '@/utils/authentication';
-import { useEffect, useMemo, useState } from 'react';
+import auth, {AuthParams} from '@/utils/authentication';
+import {useEffect, useMemo, useState} from 'react';
 
 export type IRoute = AuthParams & {
   name: string;
@@ -13,6 +13,10 @@ export type IRoute = AuthParams & {
 
 export const routes: IRoute[] = [
   {
+    name: 'menu.welcome',
+    key: 'welcome',
+  },
+/*  {
     name: 'menu.dashboard',
     key: 'dashboard',
     children: [
@@ -28,12 +32,27 @@ export const routes: IRoute[] = [
         ],
       },
     ],
+  },*/
+  {
+    name: 'menu.management',
+    key: 'management',
   },
   {
     name: 'menu.visualization',
     key: 'visualization',
     children: [
       {
+        name: 'menu.visualization.monitor',
+        key: 'visualization/monitor',
+        /*requiredPermissions: [
+          { resource: 'menu.dashboard.monitor', actions: ['write'] },
+        ],*/
+      },
+      {
+        name: 'menu.visualization.history',
+        key: 'visualization/history',
+      },
+      /*{
         name: 'menu.visualization.dataAnalysis',
         key: 'visualization/data-analysis',
         requiredPermissions: [
@@ -54,10 +73,10 @@ export const routes: IRoute[] = [
           },
         ],
         oneOfPerm: true,
-      },
+      },*/
     ],
   },
-  {
+  /*{
     name: 'menu.list',
     key: 'list',
     children: [
@@ -135,6 +154,10 @@ export const routes: IRoute[] = [
         key: 'exception/500',
       },
     ],
+  },*/
+  {
+    name: 'menu.download',
+    key: 'download',
   },
   {
     name: 'menu.user',
@@ -215,8 +238,7 @@ const useRoute = (userPermission): [IRoute[], string] => {
   const defaultRoute = useMemo(() => {
     const first = permissionRoute[0];
     if (first) {
-      const firstRoute = first?.children?.[0]?.key || first.key;
-      return firstRoute;
+      return first?.children?.[0]?.key || first.key
     }
     return '';
   }, [permissionRoute]);
