@@ -91,7 +91,7 @@ function Navbar({ show }: { show: boolean }) {
 
   const droplist = (
     <Menu onClickMenuItem={onMenuItemClick}>
-      <Menu.SubMenu
+      {/*<Menu.SubMenu
         key="role"
         title={
           <>
@@ -132,7 +132,7 @@ function Navbar({ show }: { show: boolean }) {
         </Menu.Item>
       </Menu.SubMenu>
 
-      <Divider style={{ margin: '4px 0' }} />
+      <Divider style={{ margin: '4px 0' }} />*/}
       <Menu.Item key="logout">
         <IconPoweroff className={styles['dropdown-icon']} />
         {t['navbar.logout']}

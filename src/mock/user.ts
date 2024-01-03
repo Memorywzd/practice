@@ -12,7 +12,7 @@ if (!isSSR) {
       const userRole = window.localStorage.getItem('userRole') || 'admin';
       Mock.mock(new RegExp('/api/user/userInfo'), () => {
         return Mock.mock({
-          name: '王立群',
+          name: 'admin',
           avatar:
             'https://lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
           email: 'wangliqun@email.com',
@@ -22,7 +22,7 @@ if (!isSSR) {
           organizationName: '前端',
           location: 'beijing',
           locationName: '北京',
-          introduction: '王力群并非是一个真实存在的人。',
+          introduction: '并非是一个真实存在的人。',
           personalWebsite: 'https://www.arco.design',
           verified: true,
           phoneNumber: /177[*]{6}[0-9]{2}/,

@@ -27,8 +27,17 @@ export default function LoginBanner() {
     },
   ];
   return (
-    <Carousel className={styles.carousel} animation="fade">
-      {data.map((item, index) => (
+      <Carousel className={styles.carousel} animation="fade">
+        <div key={`0`}>
+          <div className={styles['carousel-item']}>
+            <img
+                alt="banner-image"
+                className={styles['carousel-image']}
+                src='http://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6c85f43aed61e320ebec194e6a78d6d3.png~tplv-uwbnlip3yd-png.png'
+            />
+          </div>
+        </div>
+        {/*{data.map((item, index) => (
         <div key={`${index}`}>
           <div className={styles['carousel-item']}>
             <div className={styles['carousel-title']}>{item.slogan}</div>
@@ -40,7 +49,7 @@ export default function LoginBanner() {
             />
           </div>
         </div>
-      ))}
-    </Carousel>
-  );
+      ))}*/}
+      </Carousel>
+);
 }

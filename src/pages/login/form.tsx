@@ -76,9 +76,9 @@ export default function LoginForm() {
   return (
     <div className={styles['login-form-wrapper']}>
       <div className={styles['login-form-title']}>{t['login.form.title']}</div>
-      <div className={styles['login-form-sub-title']}>
+      {/*<div className={styles['login-form-sub-title']}>
         {t['login.form.title']}
-      </div>
+      </div>*/}
       <div className={styles['login-form-error-msg']}>{errorMessage}</div>
       <Form
         className={styles['login-form']}
@@ -111,7 +111,7 @@ export default function LoginForm() {
             <Checkbox checked={rememberPassword} onChange={setRememberPassword}>
               {t['login.form.rememberPassword']}
             </Checkbox>
-            <Link>{t['login.form.forgetPassword']}</Link>
+            {/*<Link>{t['login.form.forgetPassword']}</Link>*/}
           </div>
           <Button type="primary" long onClick={onSubmitClick} loading={loading}>
             {t['login.form.login']}
