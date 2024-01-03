@@ -45,3 +45,5 @@ yarn-error.log*
 
 # stylelint
 .stylelintcache
+
+/src/pages/un-unsed/
