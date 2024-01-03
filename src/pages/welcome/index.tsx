@@ -42,6 +42,13 @@ export default function Welcome() {
           <Typography.Text>
             以excel文件下载由指定节点、指定时间段产生的数据。
           </Typography.Text>
+
+          <Typography.Title heading={6} style={{ marginTop: 20 }}>
+            4. “个人中心”页
+          </Typography.Title>
+          <Typography.Text>
+            用户管理。
+          </Typography.Text>
         </Card>
       </div>
     </div>
