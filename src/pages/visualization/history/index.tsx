@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Select, Card, Message, Space, Button, Grid, Typography} from '@arco-design/web-react';
 import PeriodLine from '@/components/Chart/period-legend-line';
+import axios from 'axios';
+import './mock';
 
 const { Row, Col } = Grid;
 const Option = Select.Option;
@@ -9,22 +11,19 @@ const nodes = ['结点1', '结点2', '结点3', '结点4'];
 const fields = ['温度', '湿度', '大气压', '光照强度', '二氧化碳浓度', '风速', '土壤湿度', '水质pH值', '能见度'];
 
 export default function History() {
-
     const [chartData, setChartData] = useState([]);
+
+    const getChartData = async () => {
+        const { data } = await axios
+            .get('/api/datagram/history')
+        setChartData(data);
+    }
+
     return (
         <div>
             <Card>
                 <Space size='large'>
-                    <Select
-                        placeholder='选择区域号'
-                        style={{width: 154}}
-                        onChange={(value) =>
-                            Message.info({
-                                content: `You select ${value}.`,
-                                showIcon: true,
-                            })
-                        }
-                    >
+                    <Select placeholder='选择区域号' style={{width: 154}}>
                         {areas.map((option, index) => (
                             <Option key={option} value={option}>
                                 {option}
@@ -45,7 +44,7 @@ export default function History() {
                             </Option>
                         ))}
                     </Select>
-                    <Button type='primary'>查询</Button>
+                    <Button type='primary' onClick={getChartData}>查询</Button>
                 </Space>
             </Card>
             <br/>
