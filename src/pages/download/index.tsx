@@ -1,48 +1,102 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Select, Card, Message, Space, Button, Grid, DatePicker, Radio } from '@arco-design/web-react';
-import PeriodLine from '@/components/Chart/period-legend-line';
+import axios from "axios";
 
-const { Row, Col } = Grid;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
-const areas = ['区域1', '区域2', '区域3', '区域4'];
-const nodes = ['结点1', '结点2', '结点3', '结点4'];
-const fields = ['温度', '湿度', '大气压', '光照强度', '二氧化碳浓度', '风速', '土壤湿度', '水质pH值', '能见度'];
-
-function onSelect(dateString, date) {
-    console.log('onSelect', dateString, date);
-}
-
-function onChange(dateString, date) {
-    console.log('onChange: ', dateString, date);
-}
-
+const api = 'http://localhost:8080';
 export default function History() {
 
-    const [chartData, setChartData] = useState([]);
+    const [areas, setAreas] = useState([]);
+    const [nodes, setNodes] = useState([]);
+
+    const [area, setArea] = useState(1);
+    const [node, setNode] = useState(1);
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+
+    function exportFile (content, customFileName, type) {
+        const blob = new Blob([content], {type: type || 'application/vnd.ms-excel'}) // 默认excel
+        const filename = content.filename || customFileName
+        const URL = window.URL || window.webkitURL
+        const objectUrl = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = objectUrl
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+    }
+    const downloadData = async () => {
+        const response = await axios
+            .get(api + '/api/dev/download', {
+                params: {
+                    areaID : area,
+                    nodeID : node,
+                    timeOfStart : startTime,
+                    timeOfEnd : endTime,
+                },
+                responseType: 'blob',
+            })
+            .then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const filename = 'data.xlsx';
+                const a = document.createElement('a');
+                a.setAttribute('href', url);
+                a.setAttribute('download', filename);
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+    }
+
+    const getNodes = async (areaID: number) => {
+        const response = await axios
+            .get(api + '/api/dev/nodeList', {
+                params: {
+                    areaID: areaID,
+                },
+            });
+        setNodes(response.data);
+    }
+
+    // 获取区域号
+    useEffect(() => {
+        const getAreas = async () => {
+            const response = await axios.get(api + '/api/dev/areaList');
+            setAreas(response.data);
+        }
+        getAreas();
+    }, []);
+
+    const handleAreaChange = (value) => {
+        setArea(value);
+        getNodes(value);
+    }
+
+    const onChange = (date, dateString) => {
+        setStartTime(date[0]);
+        setEndTime(date[1]);
+    }
+
+
+
     return (
         <div>
             <Card>
                 <Space size='large'>
-                    <Select
-                        placeholder='选择区域号'
-                        style={{width: 154}}
-                        onChange={(value) =>
-                            Message.info({
-                                content: `You select ${value}.`,
-                                showIcon: true,
-                            })
-                        }
-                    >
-                        {areas.map((option, index) => (
+                    区域号
+                    <Select placeholder='选择区域号' onChange={handleAreaChange} style={{width: 154}}>
+                        {areas.map((option) => (
                             <Option key={option} value={option}>
                                 {option}
                             </Option>
                         ))}
                     </Select>
-                    <Select placeholder='选择结点号' style={{width: 154}}>
-                        {nodes.map((option, index) => (
+                    结点号
+                    <Select placeholder='选择结点号' onChange={setNode} style={{width: 154}}>
+                        {nodes.map((option) => (
                             <Option key={option} value={option}>
                                 {option}
                             </Option>
@@ -51,14 +105,13 @@ export default function History() {
                     <RangePicker
                         style={{width: 360}}
                         showTime={{
-                            defaultValue: ['00:00', '04:05'],
-                            format: 'HH:mm',
+                            defaultValue: ['00:00:00', '00:00:00'],
+                            format: 'HH:mm:ss',
                         }}
-                        format='YYYY-MM-DD HH:mm'
+                        format='YYYY-MM-DD HH:mm:ss'
                         onChange={onChange}
-                        onSelect={onSelect}
                     />
-                    <Button type='primary'>下载</Button>
+                    <Button onClick={downloadData} type='primary'>下载</Button>
                 </Space>
             </Card>
         </div>

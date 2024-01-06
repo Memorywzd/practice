@@ -2,6 +2,7 @@ import Mock from 'mockjs';
 import setupMock from '@/utils/setupMock';
 
 setupMock({
+    mock: false,
     setup: () => {
         const getTimeLine = (name) => {
             const timeArr = new Array(12).fill(0).map((_, index) => {
@@ -9,7 +10,7 @@ setupMock({
                 return time < 9 ? `0${time}:00` : `${time}:00`;
             });
             return new Array(12).fill(0).map((_, index) => ({
-                name,
+                name: name,
                 time: timeArr[index],
                 count: Mock.Random.natural(10, 80),
             }));

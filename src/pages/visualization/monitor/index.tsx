@@ -1,10 +1,15 @@
 import {Table, Grid, Switch, Form, Radio} from '@arco-design/web-react';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import moment from 'moment';
 import './mock';
 import axios from "axios";
-import useStorage from "@/utils/useStorage";
+
+const api = 'http://localhost:8080';
 
 export default function Monitor() {
+    if(typeof window == 'undefined')
+        return null;
+
     const temp = localStorage.getItem('temperature') === 'Celsius' ? '℃' : '℉';
     const humidity = localStorage.getItem('humidity') === 'percent' ? '%' : 'g/m3';
     const pressure = localStorage.getItem('pressure') === 'kPa' ? 'kPa' : 'Pa';
@@ -16,6 +21,10 @@ export default function Monitor() {
     const visibility = localStorage.getItem('visibility') === 'm' ? 'm' : 'km';
 
     const columns = [
+        {
+            title: '存活状态',
+            dataIndex: 'isAlive',
+        },
         {
             title: '设备ID',
             dataIndex: 'devID',
@@ -29,57 +38,79 @@ export default function Monitor() {
             dataIndex: 'nodeID',
         },
         {
-            title: '时间',
+            title: '数据时间',
             dataIndex: 'time',
         },
         {
             title: '温度/' + temp,
-            dataIndex: 'temperature',
+            dataIndex: 'd1',
         },
         {
             title: '湿度/' + humidity,
-            dataIndex: 'humidity',
+            dataIndex: 'd2',
         },
         {
             title: '大气压/' + pressure,
-            dataIndex: 'pressure',
+            dataIndex: 'd3',
         },
         {
             title: '光照强度/' + light,
-            dataIndex: 'light',
+            dataIndex: 'd4',
         },
         {
             title: '二氧化碳浓度/' + co2,
-            dataIndex: 'co2',
+            dataIndex: 'd5',
         },
         {
             title: '风速/' + windSpeed,
-            dataIndex: 'windSpeed',
+            dataIndex: 'd6',
         },
         {
             title: '土壤湿度/' + soilHumidity,
-            dataIndex: 'soilHumidity',
+            dataIndex: 'd7',
         },
         {
             title: '水质pH值/' + ph,
-            dataIndex: 'ph',
+            dataIndex: 'd8',
         },
         {
             title: '能见度/' + visibility,
-            dataIndex: 'visibility',
+            dataIndex: 'd9',
         },
     ];
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [devList, setDevList] = useState([]);
+    const getDevList = async () => {
+        const response = await axios
+            .get(api + '/api/dev/monitorList')
+        setDevList(response.data);
+    }
     //使用 axios.get('/api/datagrams') 传入参数recordID、devID，获取对应的数据
     //每秒刷新一次
-    const [data, setData] = React.useState([]);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [data, setData] = useState([]);
+    /*let id = 1;*/
     const getTableData = async () => {
-        const {data} = await axios
-            .get('/api/datagrams')
-        setData(data);
+        const response = await axios
+            .get(api + '/api/dev/monitor'/*, {
+                params: {
+                    recordID: id++,
+                }
+            }*/);
+        response.data.map((item) => {
+            const startDate = moment(item.time);
+            const endDate = moment(new Date());
+            console.log(item.time, ' and ', startDate, ' and ', endDate);
+            if (endDate.diff(startDate, 'minutes') > 5) {
+                item.isAlive = 0;
+            }
+        });
+        setData(response.data);
     }
-    React.useEffect(() => {
-        getTableData();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        getDevList();
         const timer = setInterval(() => {
             getTableData();
         }, 1000);

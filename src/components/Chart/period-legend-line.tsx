@@ -7,6 +7,17 @@ import useBizTheme from '@/utils/useChartTheme';
 const lineColor = ['#21CCFF', '#313CA9', '#249EFF'];
 
 function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
+
+    const temp = localStorage.getItem('temperature') === 'Celsius' ? '℃' : '℉';
+    const humidity = localStorage.getItem('humidity') === 'percent' ? '%' : 'g/m3';
+    const pressure = localStorage.getItem('pressure') === 'kPa' ? 'kPa' : 'Pa';
+    const light = localStorage.getItem('light') === 'lux' ? 'lux' : 'cd/m2';
+    const co2 = localStorage.getItem('co2') === 'ppm' ? 'ppm' : 'mg/m3';
+    const windSpeed = localStorage.getItem('windSpeed') === 'm/s' ? 'm/s' : 'km/h';
+    const soilHumidity = localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
+    const ph = localStorage.getItem('ph') === 'pH' ? 'pH' : 'mol/L';
+    const visibility = localStorage.getItem('visibility') === 'm' ? 'm' : 'km';
+
     return (
         <Spin loading={loading} style={{width: '100%'}}>
             <Chart
@@ -19,7 +30,7 @@ function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
                 scale={{time: 'time'}}
                 className={'chart-wrapper'}
             >
-                <Line shape={'smooth'} position="time*count" color={['name', lineColor]}/>
+                <Line /*shape={'smooth'}*/ position="time*count" color={['name', lineColor]}/>
                 <Tooltip crosshairs={{type: 'x'}} showCrosshairs shared>
                     {(title, items) => {
                         return <CustomTooltip title={title} data={items}/>;
@@ -33,8 +44,42 @@ function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
                         },
                     }}
                 />
+                <Axis
+                    name="time"
+                    label={{
+                        formatter(text, item) {
+                            return `${item.name}`;
+                        },
+                    }}
+                />
                 <Legend
                     name="name"
+                    itemValue={{
+                        formatter(text) {
+                            switch (text) {
+                                case '温度':
+                                    return temp;
+                                case '湿度':
+                                    return humidity;
+                                case '大气压':
+                                    return pressure;
+                                case '光照强度':
+                                    return light;
+                                case '二氧化碳浓度':
+                                    return co2;
+                                case '风速':
+                                    return windSpeed;
+                                case '土壤湿度':
+                                    return soilHumidity;
+                                case '水质pH值':
+                                    return ph;
+                                case '能见度':
+                                    return visibility;
+                                default:
+                                    return '';
+                            }
+                        },
+                    }}
                     marker={(_, index) => {
                         return {
                             symbol: 'circle',
