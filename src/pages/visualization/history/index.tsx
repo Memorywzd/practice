@@ -4,7 +4,7 @@ import PeriodLine from '@/components/Chart/period-legend-line';
 import axios from 'axios';
 import './mock';
 
-const api = 'http://localhost:8080';
+const api = 'http://bj.memorywzd.tk:9308';
 
 const Option = Select.Option;
 const fields = ['温度', '湿度', '大气压', '光照强度', '二氧化碳浓度', '风速', '土壤湿度', '水质pH值', '能见度'];

@@ -4,7 +4,7 @@ import moment from 'moment';
 import './mock';
 import axios from "axios";
 
-const api = 'http://localhost:8080';
+const api = 'http://bj.memorywzd.tk:9308';
 
 export default function Monitor() {
     if(typeof window == 'undefined')

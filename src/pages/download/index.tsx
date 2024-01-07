@@ -5,7 +5,7 @@ import axios from "axios";
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
-const api = 'http://localhost:8080';
+const api = 'http://bj.memorywzd.tk:9308';
 export default function History() {
 
     const [areas, setAreas] = useState([]);
