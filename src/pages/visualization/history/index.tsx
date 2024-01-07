@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Select, Tag, Card, Space, Button, Typography} from '@arco-design/web-react';
 import PeriodLine from '@/components/Chart/period-legend-line';
 import axios from 'axios';
+import { getDataByIndex } from '@/utils/unitConversion';
 import './mock';
 
 const api = 'http://bj.memorywzd.tk:9308';
@@ -27,6 +28,11 @@ export default function History() {
                     data: field,
                 },
             })
+        response.data.forEach((item) => {
+            console.log(item.count, field);
+            item.count = getDataByIndex(item.count, field, 1);
+            console.log(item.count, field);
+        })
         setChartData(response.data);
     }
 

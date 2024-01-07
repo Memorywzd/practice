@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import './mock';
 import axios from "axios";
+import { getData } from '@/utils/unitConversion';
+
 
 const api = 'http://bj.memorywzd.tk:9308';
 
@@ -99,6 +101,7 @@ export default function Monitor() {
                 }
             }*/);
         response.data.map((item) => {
+            getData(item, 1, 1);
             const startDate = moment(item.time);
             const endDate = moment(new Date());
             console.log(item.time, ' and ', startDate, ' and ', endDate);
