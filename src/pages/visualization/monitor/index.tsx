@@ -8,6 +8,7 @@ import useStorage from "@/utils/useStorage";
 
 
 const api = 'http://bj.memorywzd.tk:9308';
+//const api = 'http://localhost:8080';
 
 export default function Monitor() {
     const [tempUnit] = useStorage('temperature');
@@ -41,11 +42,11 @@ export default function Monitor() {
         },
         {
             title: '区域ID',
-            dataIndex: 'areaID',
+            dataIndex: 'devArea',
         },
         {
             title: '结点ID',
-            dataIndex: 'nodeID',
+            dataIndex: 'devNode',
         },
         {
             title: '数据时间',
@@ -104,13 +105,18 @@ export default function Monitor() {
             getData(item, 1, 1);
             const startDate = moment(item.time);
             const endDate = moment(new Date());
-            console.log(item.time, ' and ', startDate, ' and ', endDate);
             if (endDate.diff(startDate, 'minutes') > 5) {
                 item.isAlive = '离线';
             }
             else {
                 item.isAlive = '在线';
             }
+            /*if (item.isAlive === 0) {
+                item.isAlive = '离线';
+            }
+            else {
+                item.isAlive = '在线';
+            }*/
         });
         setData(response.data);
     }
