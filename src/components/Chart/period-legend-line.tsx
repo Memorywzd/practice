@@ -3,21 +3,31 @@ import {Chart, Line, Axis, Tooltip, Legend, Slider} from 'bizcharts';
 import {Spin} from '@arco-design/web-react';
 import CustomTooltip from './customer-tooltip';
 import useBizTheme from '@/utils/useChartTheme';
+import useStorage from "@/utils/useStorage";
 
 const lineColor = ['#21CCFF', '#313CA9', '#249EFF'];
 
 function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
 
-    const temp = localStorage.getItem('temperature') === 'Celsius' ? '℃' : '℉';
-    const humidity = localStorage.getItem('humidity') === 'percent' ? '%' : 'g/m3';
-    const pressure = localStorage.getItem('pressure') === 'kPa' ? 'kPa' : 'Pa';
-    const light = localStorage.getItem('light') === 'lux' ? 'lux' : 'cd/m2';
-    const co2 = localStorage.getItem('co2') === 'ppm' ? 'ppm' : 'mg/m3';
-    const windSpeed = localStorage.getItem('windSpeed') === 'm/s' ? 'm/s' : 'km/h';
-    const soilHumidity = localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
-    const ph = localStorage.getItem('ph') === 'pH' ? 'pH' : 'mol/L';
-    const visibility = localStorage.getItem('visibility') === 'm' ? 'm' : 'km';
+    const [tempUnit] = useStorage('temperature');
+    //const [humidityUnit] = useStorage('humidity');
+    const [pressureUnit] = useStorage('pressure');
+    const [lightUnit] = useStorage('light');
+    const [co2Unit] = useStorage('co2');
+    const [windSpeedUnit] = useStorage('windSpeed');
+    //const [soilHumidityUnit] = useStorage('soilHumidity');
+    const [phUnit] = useStorage('ph');
+    const [visibilityUnit] = useStorage('visibility');
 
+    const temp = tempUnit === 'Celsius' ? '℃' : '℉';
+    const humidity = '%';
+    const pressure = pressureUnit === 'kPa' ? 'kPa' : 'Pa';
+    const light = lightUnit === 'lux' ? 'lux' : 'cd/m2';
+    const co2 = co2Unit === 'ppm' ? 'ppm' : 'ppmv';
+    const windSpeed = windSpeedUnit === 'm/s' ? 'm/s' : 'km/h';
+    const soilHumidity = '%'; //localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
+    const ph = phUnit === 'pH' ? 'pH' : 'mol/L';
+    const visibility = visibilityUnit === 'm' ? 'm' : 'km';
     return (
         <Spin loading={loading} style={{width: '100%'}}>
             <Chart

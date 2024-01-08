@@ -1,26 +1,34 @@
-import {Table, Grid, Switch, Form, Radio} from '@arco-design/web-react';
+import {Table} from '@arco-design/web-react';
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import './mock';
 import axios from "axios";
 import { getData } from '@/utils/unitConversion';
+import useStorage from "@/utils/useStorage";
 
 
 const api = 'http://bj.memorywzd.tk:9308';
 
 export default function Monitor() {
-    if(typeof window == 'undefined')
-        return null;
+    const [tempUnit] = useStorage('temperature');
+    //const [humidityUnit] = useStorage('humidity');
+    const [pressureUnit] = useStorage('pressure');
+    const [lightUnit] = useStorage('light');
+    const [co2Unit] = useStorage('co2');
+    const [windSpeedUnit] = useStorage('windSpeed');
+    //const [soilHumidityUnit] = useStorage('soilHumidity');
+    const [phUnit] = useStorage('ph');
+    const [visibilityUnit] = useStorage('visibility');
 
-    const temp = localStorage.getItem('temperature') === 'Celsius' ? '℃' : '℉';
-    const humidity = localStorage.getItem('humidity') === 'percent' ? '%' : 'g/m3';
-    const pressure = localStorage.getItem('pressure') === 'kPa' ? 'kPa' : 'Pa';
-    const light = localStorage.getItem('light') === 'lux' ? 'lux' : 'cd/m2';
-    const co2 = localStorage.getItem('co2') === 'ppm' ? 'ppm' : 'mg/m3';
-    const windSpeed = localStorage.getItem('windSpeed') === 'm/s' ? 'm/s' : 'km/h';
-    const soilHumidity = localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
-    const ph = localStorage.getItem('ph') === 'pH' ? 'pH' : 'mol/L';
-    const visibility = localStorage.getItem('visibility') === 'm' ? 'm' : 'km';
+    const temp = tempUnit === 'Celsius' ? '℃' : '℉';
+    const humidity = '%';
+    const pressure = pressureUnit === 'kPa' ? 'kPa' : 'Pa';
+    const light = lightUnit === 'lux' ? 'lux' : 'cd/m2';
+    const co2 = co2Unit === 'ppm' ? 'ppm' : 'ppmv';
+    const windSpeed = windSpeedUnit === 'm/s' ? 'm/s' : 'km/h';
+    const soilHumidity = '%'; //localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
+    const ph = phUnit === 'pH' ? 'pH' : 'mol/L';
+    const visibility = visibilityUnit === 'm' ? 'm' : 'km';
 
     const columns = [
         {
@@ -81,16 +89,8 @@ export default function Monitor() {
         },
     ];
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [devList, setDevList] = useState([]);
-    const getDevList = async () => {
-        const response = await axios
-            .get(api + '/api/dev/monitorList')
-        setDevList(response.data);
-    }
     //使用 axios.get('/api/datagrams') 传入参数recordID、devID，获取对应的数据
     //每秒刷新一次
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [data, setData] = useState([]);
     /*let id = 1;*/
     const getTableData = async () => {
@@ -106,14 +106,15 @@ export default function Monitor() {
             const endDate = moment(new Date());
             console.log(item.time, ' and ', startDate, ' and ', endDate);
             if (endDate.diff(startDate, 'minutes') > 5) {
-                item.isAlive = 0;
+                item.isAlive = '离线';
+            }
+            else {
+                item.isAlive = '在线';
             }
         });
         setData(response.data);
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        getDevList();
         const timer = setInterval(() => {
             getTableData();
         }, 1000);

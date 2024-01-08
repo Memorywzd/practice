@@ -74,8 +74,8 @@ export default function Management() {
                         <FormItem label='数据2：湿度'>
                             <RadioGroup onChange={setHumidity} type='button' defaultValue='percent'
                                         name='humidity' value={humidity}>
-                                <Radio value='percent'>百分比</Radio>
-                                <Radio value='g/m3'>克/立方米</Radio>
+                                <Radio value='percent'>相对湿度</Radio>
+                                <Radio value='g/m3'>绝对湿度</Radio>
                             </RadioGroup>
                         </FormItem>
                         <FormItem label='数据3：大气压'>
@@ -96,7 +96,7 @@ export default function Management() {
                             <RadioGroup onChange={setCo2} type='button' defaultValue='ppm'
                                         name='co2' value={co2}>
                                 <Radio value='ppm'>ppm</Radio>
-                                <Radio value='mg/m3'>毫克/立方米</Radio>
+                                <Radio value='ppmv'>ppmv</Radio>
                             </RadioGroup>
                         </FormItem>
                         <FormItem label='数据6：风速'>
@@ -109,8 +109,8 @@ export default function Management() {
                         <FormItem label='数据7：土壤湿度'>
                             <RadioGroup onChange={setSoilHumidity} type='button' defaultValue='percent'
                                         name='soilHumidity' value={soilHumidity}>
-                                <Radio value='percent'>百分比</Radio>
-                                <Radio value='g/m3'>克/立方米</Radio>
+                                <Radio value='percent'>体积分数</Radio>
+                                <Radio value='g/m3'>质量分数</Radio>
                             </RadioGroup>
                         </FormItem>
                         <FormItem label='数据8：水质pH值'>

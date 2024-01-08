@@ -1,6 +1,5 @@
 import React from 'react';
-import { Alert, Card, Link, Typography, Tag } from '@arco-design/web-react';
-import { IconDoubleRight } from '@arco-design/web-react/icon';
+import { Card, Typography } from '@arco-design/web-react';
 import { useSelector } from 'react-redux';
 import styles from './style/index.module.less';
 import useStorage from "@/utils/useStorage";
@@ -16,7 +15,7 @@ export default function Welcome() {
           欢迎
         </Typography.Title>
         <Typography.Text type="secondary">
-          {userRole === 'admin' ? '管理员' : '普通用户'}用户 {userInfo.name}，欢迎使用智能监测系统！
+          {userRole === 'admin' ? '管理员' : '普通用户'} {userInfo.name}，欢迎使用数据实时监测与展示系统！
         </Typography.Text>
       </div>
       <div>
