@@ -105,18 +105,18 @@ export default function Monitor() {
             getData(item, 1, 1);
             const startDate = moment(item.time);
             const endDate = moment(new Date());
-            if (endDate.diff(startDate, 'minutes') > 5) {
-                item.isAlive = '离线';
-            }
-            else {
-                item.isAlive = '在线';
-            }
-            /*if (item.isAlive === 0) {
+            /*if (endDate.diff(startDate, 'minutes') > 5) {
                 item.isAlive = '离线';
             }
             else {
                 item.isAlive = '在线';
             }*/
+            if (item.isAlive === 0) {
+                item.isAlive = '离线';
+            }
+            else {
+                item.isAlive = '在线';
+            }
         });
         setData(response.data);
     }
