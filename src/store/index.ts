@@ -4,10 +4,7 @@ export interface GlobalState {
   userInfo?: {
     name?: string;
     avatar?: string;
-    job?: string;
-    organization?: string;
-    location?: string;
-    email?: string;
+    devices?: number[];
     permissions: Record<string, string[]>;
   };
   userLoading?: boolean;

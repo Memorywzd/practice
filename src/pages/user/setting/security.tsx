@@ -1,65 +1,70 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
 import cs from 'classnames';
-import { Button } from '@arco-design/web-react';
+import {Button, Input, Select, Space} from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
+import axios from "axios";
+const api = 'http://bj.memorywzd.tk:9308';
+const Option = Select.Option;
 
 function Security() {
-  const t = useLocale(locale);
 
-  const userInfo = useSelector((state: any) => {
-    return state.userInfo || {};
-  });
+  const [areas, setAreas] = useState([]);
+  const [nodes, setNodes] = useState([]);
 
-  const data = [
-    {
-      title: t['userSetting.security.password'],
-      value: t['userSetting.security.password.tips'],
-    },
-    {
-      title: t['userSetting.security.question'],
-      value: '',
-      placeholder: t['userSetting.security.question.placeholder'],
-    },
-    {
-      title: t['userSetting.security.phone'],
-      value: userInfo.phoneNumber
-        ? `${t['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
-        : '',
-    },
-    {
-      title: t['userSetting.security.email'],
-      value: '',
-      placeholder: t['userSetting.security.email.placeholder'],
-    },
-  ];
+  const [area, setArea] = useState(1);
+  const [node, setNode] = useState(1);
+  const getNodes = async (areaID: number) => {
+    const response = await axios
+        .get(api + '/api/dev/nodeList', {
+          params: {
+            areaID: areaID,
+          },
+        });
+    setNodes(response.data);
+  }
+
+  // 获取区域号
+  useEffect(() => {
+    const getAreas = async () => {
+      const response = await axios.get(api + '/api/dev/areaList');
+      setAreas(response.data);
+    }
+    getAreas();
+  }, []);
+
+  const handleAreaChange = (value) => {
+    setArea(value);
+    getNodes(value);
+  }
+
+
 
   return (
     <div className={styles['security']}>
-      {data.map((item, index) => (
-        <div className={styles['security-item']} key={index}>
-          <span className={styles['security-item-title']}>{item.title}</span>
-          <div className={styles['security-item-content']}>
-            <span
-              className={cs({
-                [`${styles['security-item-placeholder']}`]: !item.value,
-              })}
-            >
-              {item.value || item.placeholder}
-            </span>
-
-            <span>
-              <Button type="text">
-                {item.value
-                  ? t['userSetting.btn.edit']
-                  : t['userSetting.btn.set']}
-              </Button>
-            </span>
-          </div>
-        </div>
-      ))}
+      <Space size='large'>
+        区域号
+        <Select placeholder='选择区域号' onChange={handleAreaChange} style={{width: 154}}>
+          {areas.map((option) => (
+              <Option key={option} value={option}>
+                {option}
+              </Option>
+          ))}
+        </Select>
+        结点号
+        <Select placeholder='选择结点号' onChange={setNode} style={{width: 154}}>
+          {nodes.map((option) => (
+              <Option key={option} value={option}>
+                {option}
+              </Option>
+          ))}
+        </Select>
+        用户id
+        <Input type="text"/>
+        <Button type="primary">保存</Button>
+        </Space>
     </div>
   );
 }

@@ -1,27 +1,28 @@
 import React from 'react';
 import { Avatar, Space, Skeleton } from '@arco-design/web-react';
 import {
-  IconCamera,
-  IconLocation,
-  IconUser,
-  IconHome,
+    IconUser, IconCommon,
 } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
+import {generatePermission} from "@/routes";
 
 interface HeaderProps {
   userInfo?: {
     name?: string;
     avatar?: string;
-    jobName?: string;
-    organizationName?: string;
-    locationName?: string;
+    role?: string;
+    permissions?: object;
+    devices?: object;
   };
   loading?: boolean;
 }
 
 function UserInfoHeader(props: HeaderProps) {
-  const { userInfo = {}, loading } = props;
 
+  const { userInfo = {}, loading } = props;
+  console.log(generatePermission(userInfo.role));
+  console.log(userInfo.devices);
+  console.log(userInfo.permissions)
   const loadingNode = (
     <Skeleton
       text={{
@@ -50,7 +51,7 @@ function UserInfoHeader(props: HeaderProps) {
         {loading ? (
           loadingImgNode
         ) : (
-          <Avatar size={64} triggerIcon={<IconCamera />}>
+          <Avatar size={64}>
             <img src={userInfo.avatar} />
           </Avatar>
         )}
@@ -58,26 +59,10 @@ function UserInfoHeader(props: HeaderProps) {
           {loading ? loadingNode : userInfo.name}
         </div>
         <div className={styles['user-msg']}>
-          <Space size={18}>
-            <div>
-              <IconUser />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.jobName}
-              </span>
-            </div>
-            <div>
-              <IconHome />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.organizationName}
-              </span>
-            </div>
-            <div>
-              <IconLocation />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.locationName}
-              </span>
-            </div>
-          </Space>
+            <Space size={8} align="center">
+                <IconUser />用户角色{loading ? loadingNode : userInfo.role}
+                <IconCommon />拥有的设备id：{loading ? loadingNode : userInfo.devices}
+            </Space>
         </div>
       </Space>
     </div>

@@ -32,7 +32,7 @@ export default function MyApp({
   renderConfig,
 }: AppProps & { renderConfig: RenderConfig }) {
   const { arcoLang, arcoTheme } = renderConfig;
-  const [lang, setLang] = useStorage('arco-lang', arcoLang || 'en-US');
+  const [lang, setLang] = useStorage('arco-lang', arcoLang || 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', arcoTheme || 'light');
   const router = useRouter();
 

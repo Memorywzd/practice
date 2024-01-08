@@ -49,122 +49,51 @@ function InfoForm({ loading }: { loading?: boolean }) {
       wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
     >
       <Form.Item
-        label={t['userSetting.info.email']}
+        label={'用户名'}
         field="email"
         rules={[
           {
             type: 'email',
             required: true,
-            message: t['userSetting.info.email.placeholder'],
           },
         ]}
       >
         {loading ? (
           loadingNode()
         ) : (
-          <Input placeholder={t['userSetting.info.email.placeholder']} />
+          <Input />
         )}
       </Form.Item>
       <Form.Item
-        label={t['userSetting.info.nickName']}
+        label={'密码'}
         field="nickName"
         rules={[
           {
             required: true,
-            message: t['userSetting.info.nickName.placeholder'],
           },
         ]}
       >
         {loading ? (
           loadingNode()
         ) : (
-          <Input placeholder={t['userSetting.info.nickName.placeholder']} />
+          <Input />
         )}
       </Form.Item>
       <Form.Item
-        label={t['userSetting.info.area']}
+        label={'头像'}
         field="rangeArea"
-        rules={[
-          { required: true, message: t['userSetting.info.area.placeholder'] },
-        ]}
       >
         {loading ? (
-          loadingNode()
+            loadingNode()
         ) : (
-          <Select
-            options={['中国']}
-            placeholder={t['userSetting.info.area.placeholder']}
-          />
-        )}
-      </Form.Item>
-      <Form.Item
-        label={t['userSetting.info.location']}
-        field="location"
-        initialValue={['BeiJing', 'BeiJing', 'HaiDian']}
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        {loading ? (
-          loadingNode()
-        ) : (
-          <Cascader
-            options={[
-              {
-                label: '北京市',
-                value: 'BeiJing',
-                children: [
-                  {
-                    label: '北京市',
-                    value: 'BeiJing',
-                    children: [
-                      { label: '海淀区', value: 'HaiDian' },
-                      { label: '朝阳区', value: 'ChaoYang' },
-                    ],
-                  },
-                ],
-              },
-              {
-                label: '上海市',
-                value: 'ShangHai',
-                children: [
-                  {
-                    label: '上海市',
-                    value: 'ShangHai',
-                    children: [
-                      { label: '黄浦区', value: 'HuangPu' },
-                      { label: '静安区', value: 'JingAn' },
-                    ],
-                  },
-                ],
-              },
-            ]}
-          />
-        )}
-      </Form.Item>
-      <Form.Item label={t['userSetting.info.address']} field="address">
-        {loading ? (
-          loadingNode()
-        ) : (
-          <Input placeholder={t['userSetting.info.address.placeholder']} />
-        )}
-      </Form.Item>
-      <Form.Item label={t['userSetting.info.profile']} field="profile">
-        {loading ? (
-          loadingNode(3)
-        ) : (
-          <Input.TextArea
-            placeholder={t['userSetting.info.profile.placeholder']}
-          />
+            <Input />
         )}
       </Form.Item>
 
       <Form.Item label=" ">
         <Space>
           <Button type="primary" onClick={handleSave}>
-            {t['userSetting.save']}
+            {'提交'}
           </Button>
           <Button onClick={handleReset}>{t['userSetting.reset']}</Button>
         </Space>
