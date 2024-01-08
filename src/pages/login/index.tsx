@@ -34,4 +34,4 @@ function Login() {
 }
 Login.displayName = 'LoginPage';
 
- Login;
+export default Login;
