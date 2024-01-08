@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Select, Card, Message, Space, Button, Grid, DatePicker, Radio } from '@arco-design/web-react';
 import axios from "axios";
+import fileDownload from 'js-file-download';
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -16,18 +17,6 @@ export default function History() {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
 
-    function exportFile (content, customFileName, type) {
-        const blob = new Blob([content], {type: type || 'application/vnd.ms-excel'}) // 默认excel
-        const filename = content.filename || customFileName
-        const URL = window.URL || window.webkitURL
-        const objectUrl = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = objectUrl
-        a.download = filename
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-    }
     const downloadData = async () => {
         const response = await axios
             .get(api + '/api/dev/download', {
@@ -39,15 +28,26 @@ export default function History() {
                 },
                 responseType: 'blob',
             })
-            .then((response) => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const filename = 'data.xlsx';
-                const a = document.createElement('a');
-                a.setAttribute('href', url);
-                a.setAttribute('download', filename);
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+            .then((res) => {
+                console.log(res);
+                fileDownload(res.data, 'data.csv');
+            });
+    }
+    const downloadData1 = async () => {
+        const response = await axios
+            .get(api + '/api/dev/download', {
+                params: {
+                    areaID : area,
+                    nodeID : node,
+                    timeOfStart : startTime,
+                    timeOfEnd : endTime,
+                    type: 1,
+                },
+                responseType: 'blob',
+            })
+            .then((res) => {
+                console.log(res);
+                fileDownload(res.data, 'data.xlsx');
             });
     }
 
@@ -111,7 +111,8 @@ export default function History() {
                         format='YYYY-MM-DD HH:mm:ss'
                         onChange={onChange}
                     />
-                    <Button onClick={downloadData} type='primary'>下载</Button>
+                    <Button onClick={downloadData} type='primary'>下载csv</Button>
+                    <Button onClick={downloadData1} type='primary'>下载xlsx</Button>
                 </Space>
             </Card>
         </div>

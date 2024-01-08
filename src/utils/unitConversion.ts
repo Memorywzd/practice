@@ -1,6 +1,3 @@
-import {quat} from "gl-matrix";
-import exp = module
-
 export function getTemperature(data: number) {
     if (localStorage.getItem('temperature') === 'Celsius')
         return data;

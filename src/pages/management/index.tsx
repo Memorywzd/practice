@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import { Radio, Tabs, Card, Typography, Form } from '@arco-design/web-react';
+import {Radio, Tabs, Card, Typography, Form, Input, Select, Button, Space} from '@arco-design/web-react';
 import styles from "@/pages/welcome/style/index.module.less";
 import useStorage from '@/utils/useStorage';
+import axios from "axios";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
+const Option = Select.Option;
+
+const api = 'http://bj.memorywzd.tk:9308';
 
 export default function Management() {
     // 温度、湿度、大气压、光照强度、二氧化碳浓度、风速、土壤湿度、水质pH值、能见度
@@ -20,6 +24,36 @@ export default function Management() {
     const [ph, setPh] = useStorage('ph', 'pH');
     const [visibility, setVisibility] = useStorage('visibility', 'm');
 
+    const [areas, setAreas] = useState([]);
+    const [nodes, setNodes] = useState([]);
+    const [area, setArea] = useState(1);
+    const [node, setNode] = useState(1);
+    const [field, setField] = useState(1);
+
+    const getNodes = async (areaID: number) => {
+        const response = await axios
+            .get(api + '/api/dev/nodeList', {
+                params: {
+                    areaID: areaID,
+                },
+            });
+        setNodes(response.data);
+    }
+
+    // 获取区域号
+    useEffect(() => {
+        const getAreas = async () => {
+            const response = await axios.get(api + '/api/dev/areaList');
+            setAreas(response.data);
+        }
+        getAreas();
+    }, []);
+
+    const handleAreaChange = (value) => {
+        setArea(value);
+        getNodes(value);
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -27,10 +61,10 @@ export default function Management() {
                     设置设备的监测数据代表的物理意义和物理量的换算方式
                 </Typography.Text>
             </div>
-            <Card style={{ marginTop: 20 }}>
+            <Card style={{marginTop: 20}}>
                 <Typography.Paragraph>
                     <Form layout={'horizontal'}>
-                        <FormItem label='数据1：温度' >
+                        <FormItem label='数据1：温度'>
                             <RadioGroup onChange={setTemp} type='button' defaultValue='Celsius'
                                         name='temperature' value={temp}>
                                 <Radio value='Celsius'>摄氏度</Radio>
@@ -95,6 +129,29 @@ export default function Management() {
                         </FormItem>
                     </Form>
                 </Typography.Paragraph>
+            </Card>
+            <br/>
+            <Card title={'向设备发送管理指令'}>
+                <Space size='large'>
+                    区域号
+                    <Select placeholder='选择区域号' onChange={handleAreaChange} style={{width: 154}}>
+                        {areas.map((option) => (
+                            <Option key={option} value={option}>
+                                {option}
+                            </Option>
+                        ))}
+                    </Select>
+                    结点号
+                    <Select placeholder='选择结点号' onChange={setNode} style={{width: 154}}>
+                        {nodes.map((option) => (
+                            <Option key={option} value={option}>
+                                {option}
+                            </Option>
+                        ))}
+                    </Select>
+                    <Input placeholder='请输入指令'/>
+                    <Button type='primary'>执行</Button>
+                </Space>
             </Card>
         </div>
     )
