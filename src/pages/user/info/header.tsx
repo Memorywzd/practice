@@ -12,7 +12,7 @@ interface HeaderProps {
     avatar?: string;
     role?: string;
     permissions?: object;
-    devices?: object;
+    devices?: number[];
   };
   loading?: boolean;
 }

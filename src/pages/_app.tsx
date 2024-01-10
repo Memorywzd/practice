@@ -16,8 +16,12 @@ import { GlobalContext } from '../context';
 import checkLogin from '@/utils/checkLogin';
 import changeTheme from '@/utils/changeTheme';
 import useStorage from '@/utils/useStorage';
+import { generatePermission } from '@/routes';
 import Layout from './layout';
 import '../mock';
+
+axios.defaults.baseURL = "http://bj.memorywzd.tk:9308";
+//axios.defaults.baseURL = 'http://localhost:8080';
 
 const store = createStore(rootReducer);
 
@@ -34,6 +38,8 @@ export default function MyApp({
   const { arcoLang, arcoTheme } = renderConfig;
   const [lang, setLang] = useStorage('arco-lang', arcoLang || 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', arcoTheme || 'light');
+  const userID = useStorage('userId')[0];
+  const [userRole, setUserRole] = useStorage('userRole');
   const router = useRouter();
 
   const locale = useMemo(() => {
@@ -52,7 +58,23 @@ export default function MyApp({
       type: 'update-userInfo',
       payload: { userLoading: true },
     });
-    axios.get('/api/user/userInfo').then((res) => {
+    axios.get('/api/user/userInfo', {
+      params: {
+        id: userID,
+      },
+    }).then((res) => {
+      if(res.data.role === 'admin'){
+        setUserRole('admin');
+        res.data.permissions = {
+          'menu.user.setting': ['*'],
+        };
+      }
+      else {
+        setUserRole('user');
+        res.data.permissions = {
+          'menu.user.setting': ['none'],
+        };
+      }
       store.dispatch({
         type: 'update-userInfo',
         payload: { userInfo: res.data, userLoading: false },

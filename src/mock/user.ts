@@ -1,12 +1,12 @@
 import Mock from 'mockjs';
 import { isSSR } from '@/utils/is';
 import setupMock from '@/utils/setupMock';
-import { generatePermission } from '@/routes';
 
 if (!isSSR) {
   Mock.XHR.prototype.withCredentials = true;
 
   setupMock({
+    mock: false,
     setup: () => {
       // 用户信息
       const userRole = window.localStorage.getItem('userRole') || 'admin';

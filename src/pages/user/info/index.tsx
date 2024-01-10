@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import UserInfoHeader from './header';
 import './mock';
-import { Card } from '@arco-design/web-react';
-import {generatePermission} from "@/routes";
 
 function UserInfo() {
   const userInfo = useSelector((state: any) => state.userInfo);
