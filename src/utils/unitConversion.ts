@@ -71,6 +71,10 @@ export function getData(data, factor1: number, factor2: number) {
     data.d9 = getVisibility(data.d9);
 }
 
+export function getUnit(data: number, factor:number, adder:number) {
+    return data * factor + adder;
+}
+
 
 export function getDataByIndex(data, index: number, factor: number) {
     switch (index) {

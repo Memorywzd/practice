@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Select, Card, Message, Space, Button, Grid, DatePicker, Radio } from '@arco-design/web-react';
 import axios from "axios";
 import fileDownload from 'js-file-download';
+import useStorage from "@/utils/useStorage";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -16,6 +17,7 @@ export default function History() {
     const [node, setNode] = useState(1);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const userID = useStorage('userId')[0];
 
     const downloadData = async () => {
         const response = await axios
@@ -56,6 +58,7 @@ export default function History() {
             .get(api + '/api/dev/nodeList', {
                 params: {
                     areaID: areaID,
+                    userID: userID,
                 },
             });
         setNodes(response.data);
@@ -64,7 +67,12 @@ export default function History() {
     // 获取区域号
     useEffect(() => {
         const getAreas = async () => {
-            const response = await axios.get(api + '/api/dev/areaList');
+            const response = await axios
+                .get(api + '/api/dev/areaList', {
+                    params: {
+                        userID: userID,
+                    },
+                });
             setAreas(response.data);
         }
         getAreas();

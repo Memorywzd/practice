@@ -11,19 +11,17 @@ import zhCN from '@arco-design/web-react/es/locale/zh-CN';
 import enUS from '@arco-design/web-react/es/locale/en-US';
 import axios from 'axios';
 import NProgress from 'nprogress';
-import rootReducer from '../store';
+import store from '../store';
 import { GlobalContext } from '../context';
 import checkLogin from '@/utils/checkLogin';
 import changeTheme from '@/utils/changeTheme';
 import useStorage from '@/utils/useStorage';
-import { generatePermission } from '@/routes';
 import Layout from './layout';
 import '../mock';
 
 axios.defaults.baseURL = "http://bj.memorywzd.tk:9308";
 //axios.defaults.baseURL = 'http://localhost:8080';
 
-const store = createStore(rootReducer);
 
 interface RenderConfig {
   arcoLang?: string;

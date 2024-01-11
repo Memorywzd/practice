@@ -3,12 +3,12 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import './mock';
 import axios from "axios";
-import { getData } from '@/utils/unitConversion';
+import {getData, getUnit} from '@/utils/unitConversion';
 import useStorage from "@/utils/useStorage";
+import {useSelector} from "react-redux";
 
 
-const api = 'http://bj.memorywzd.tk:9308';
-//const api = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://bj.memorywzd.tk:9308';
 
 export default function Monitor() {
     const [tempUnit] = useStorage('temperature');
@@ -30,6 +30,10 @@ export default function Monitor() {
     const soilHumidity = '%'; //localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
     const ph = phUnit === 'pH' ? 'pH' : 'mol/L';
     const visibility = visibilityUnit === 'm' ? 'm' : 'km';
+
+    const unit = useSelector((state: any) => state.unit);
+    const factor = useSelector((state: any) => state.factor);
+    const adder = useSelector((state: any) => state.adder);
 
     const columns = [
         {
@@ -53,11 +57,11 @@ export default function Monitor() {
             dataIndex: 'time',
         },
         {
-            title: '温度/' + temp,
+            title: unit[0],
             dataIndex: 'd1',
         },
         {
-            title: '湿度/' + humidity,
+            title: unit[1],
             dataIndex: 'd2',
         },
         {
@@ -93,19 +97,21 @@ export default function Monitor() {
     //使用 axios.get('/api/datagrams') 传入参数recordID、devID，获取对应的数据
     //每秒刷新一次
     const [data, setData] = useState([]);
-    /*let id = 1;*/
+    const userID = useStorage('userId')[0];
     const getTableData = async () => {
         const response = await axios
-            .get(api + '/api/dev/monitor'/*, {
+            .get('/api/dev/monitor', {
                 params: {
-                    recordID: id++,
+                    userID: userID,
                 }
-            }*/);
+            });
+        let index = 0;
         response.data.map((item) => {
-            getData(item, 1, 1);
-            const startDate = moment(item.time);
+            const dataIndex = 'd' + index.toString();
+            item[dataIndex] = getUnit(item, factor[index++], adder[index++]);
+            /*const startDate = moment(item.time);
             const endDate = moment(new Date());
-            /*if (endDate.diff(startDate, 'minutes') > 5) {
+            if (endDate.diff(startDate, 'minutes') > 5) {
                 item.isAlive = '离线';
             }
             else {

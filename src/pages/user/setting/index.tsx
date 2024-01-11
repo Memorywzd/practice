@@ -17,6 +17,7 @@ function UserInfo() {
     <div>
       <Card style={{ marginTop: '16px' }}>
         <Tabs activeTab={activeTab} onChange={setActiveTab} type="rounded">
+          {/* InfoForm是用户添加板块，Security是设备分配板块，没改名字 */}
           <Tabs.TabPane key="basic" title={'用户添加'}>
             <InfoForm loading={loading} />
           </Tabs.TabPane>

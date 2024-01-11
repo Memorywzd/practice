@@ -4,6 +4,7 @@ import PeriodLine from '@/components/Chart/period-legend-line';
 import axios from 'axios';
 import { getDataByIndex } from '@/utils/unitConversion';
 import './mock';
+import useStorage from "@/utils/useStorage";
 
 const api = 'http://bj.memorywzd.tk:9308';
 
@@ -18,6 +19,7 @@ export default function History() {
     const [area, setArea] = useState(1);
     const [node, setNode] = useState(1);
     const [field, setField] = useState(1);
+    const userID = useStorage('userId')[0];
 
     const getChartData = async () => {
         const response = await axios
@@ -39,6 +41,7 @@ export default function History() {
             .get(api + '/api/dev/nodeList', {
                 params: {
                     areaID: areaID,
+                    userID: userID,
                 },
             });
         setNodes(response.data);
@@ -47,7 +50,12 @@ export default function History() {
     // 获取区域号
     useEffect(() => {
         const getAreas = async () => {
-            const response = await axios.get(api + '/api/dev/areaList');
+            const response = await axios
+                .get(api + '/api/dev/areaList', {
+                    params: {
+                        userID: userID,
+                    },
+                });
             setAreas(response.data);
         }
         getAreas();
