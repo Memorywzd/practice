@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Select, Card, Space, Button, Typography} from '@arco-design/web-react';
 import PeriodLine from '@/components/Chart/period-legend-line';
 import axios from 'axios';
-import { getDataByIndex } from '@/utils/unitConversion';
+import {getUnit} from '@/utils/unitConversion';
 import './mock';
 import useStorage from "@/utils/useStorage";
+import {useSelector} from "react-redux";
 
-const api = 'http://bj.memorywzd.tk:9308';
+axios.defaults.baseURL = 'http://bj.memorywzd.tk:9308';
 
 const Option = Select.Option;
-const fields = ['温度', '湿度', '大气压', '光照强度', '二氧化碳浓度', '风速', '土壤湿度', '水质pH值', '能见度'];
 
 export default function History() {
     const [areas, setAreas] = useState([]);
@@ -19,11 +19,16 @@ export default function History() {
     const [area, setArea] = useState(1);
     const [node, setNode] = useState(1);
     const [field, setField] = useState(1);
+
+    const unit = useSelector((state: any) => state.unit);
+    const factor = useSelector((state: any) => state.factor);
+    const adder = useSelector((state: any) => state.adder);
+
     const userID = useStorage('userId')[0];
 
     const getChartData = async () => {
         const response = await axios
-            .get(api + '/api/dev/history', {
+            .get('/api/dev/history', {
                 params: {
                     areaID : area,
                     nodeID : node,
@@ -31,14 +36,15 @@ export default function History() {
                 },
             })
         response.data.forEach((item) => {
-            item.count = getDataByIndex(item.count, field, 1);
+            item.name = unit[field - 1];
+            item.count = getUnit(item.count, factor[field - 1], adder[field - 1]);
         })
         setChartData(response.data);
     }
 
     const getNodes = async (areaID: number) => {
         const response = await axios
-            .get(api + '/api/dev/nodeList', {
+            .get('/api/dev/nodeList', {
                 params: {
                     areaID: areaID,
                     userID: userID,
@@ -51,7 +57,7 @@ export default function History() {
     useEffect(() => {
         const getAreas = async () => {
             const response = await axios
-                .get(api + '/api/dev/areaList', {
+                .get('/api/dev/areaList', {
                     params: {
                         userID: userID,
                     },
@@ -88,7 +94,7 @@ export default function History() {
                     </Select>
                     数据字段
                     <Select placeholder='选择数据字段' onChange={setField} style={{width: 154}}>
-                        {fields.map((option, index) => (
+                        {unit.map((option, index) => (
                             <Option key={option} value={index + 1}>
                                 {option}
                             </Option>

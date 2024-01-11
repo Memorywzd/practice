@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import './mock';
 import axios from "axios";
-import {getData, getUnit} from '@/utils/unitConversion';
+import {getUnit} from '@/utils/unitConversion';
 import useStorage from "@/utils/useStorage";
 import {useSelector} from "react-redux";
 
@@ -11,26 +11,6 @@ import {useSelector} from "react-redux";
 axios.defaults.baseURL = 'http://bj.memorywzd.tk:9308';
 
 export default function Monitor() {
-    const [tempUnit] = useStorage('temperature');
-    //const [humidityUnit] = useStorage('humidity');
-    const [pressureUnit] = useStorage('pressure');
-    const [lightUnit] = useStorage('light');
-    const [co2Unit] = useStorage('co2');
-    const [windSpeedUnit] = useStorage('windSpeed');
-    //const [soilHumidityUnit] = useStorage('soilHumidity');
-    const [phUnit] = useStorage('ph');
-    const [visibilityUnit] = useStorage('visibility');
-
-    const temp = tempUnit === 'Celsius' ? '℃' : '℉';
-    const humidity = '%';
-    const pressure = pressureUnit === 'kPa' ? 'kPa' : 'Pa';
-    const light = lightUnit === 'lux' ? 'lux' : 'cd/m2';
-    const co2 = co2Unit === 'ppm' ? 'ppm' : 'ppmv';
-    const windSpeed = windSpeedUnit === 'm/s' ? 'm/s' : 'km/h';
-    const soilHumidity = '%'; //localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
-    const ph = phUnit === 'pH' ? 'pH' : 'mol/L';
-    const visibility = visibilityUnit === 'm' ? 'm' : 'km';
-
     const unit = useSelector((state: any) => state.unit);
     const factor = useSelector((state: any) => state.factor);
     const adder = useSelector((state: any) => state.adder);
@@ -65,31 +45,31 @@ export default function Monitor() {
             dataIndex: 'd2',
         },
         {
-            title: '大气压/' + pressure,
+            title: unit[2],
             dataIndex: 'd3',
         },
         {
-            title: '光照强度/' + light,
+            title: unit[3],
             dataIndex: 'd4',
         },
         {
-            title: '二氧化碳浓度/' + co2,
+            title: unit[4],
             dataIndex: 'd5',
         },
         {
-            title: '风速/' + windSpeed,
+            title: unit[5],
             dataIndex: 'd6',
         },
         {
-            title: '土壤湿度/' + soilHumidity,
+            title: unit[6],
             dataIndex: 'd7',
         },
         {
-            title: '水质pH值/' + ph,
+            title: unit[7],
             dataIndex: 'd8',
         },
         {
-            title: '能见度/' + visibility,
+            title: unit[8],
             dataIndex: 'd9',
         },
     ];
@@ -105,10 +85,10 @@ export default function Monitor() {
                     userID: userID,
                 }
             });
-        let index = 0;
         response.data.map((item) => {
-            const dataIndex = 'd' + index.toString();
-            item[dataIndex] = getUnit(item, factor[index++], adder[index++]);
+            for (let i = 0; i < 9; i++) {
+                item['d' + (i + 1)] = getUnit(item['d' + (i + 1)], factor[i], adder[i]);
+            }
             /*const startDate = moment(item.time);
             const endDate = moment(new Date());
             if (endDate.diff(startDate, 'minutes') > 5) {

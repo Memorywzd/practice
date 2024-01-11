@@ -8,26 +8,6 @@ import useStorage from "@/utils/useStorage";
 const lineColor = ['#21CCFF', '#313CA9', '#249EFF'];
 
 function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
-
-    const [tempUnit] = useStorage('temperature');
-    //const [humidityUnit] = useStorage('humidity');
-    const [pressureUnit] = useStorage('pressure');
-    const [lightUnit] = useStorage('light');
-    const [co2Unit] = useStorage('co2');
-    const [windSpeedUnit] = useStorage('windSpeed');
-    //const [soilHumidityUnit] = useStorage('soilHumidity');
-    const [phUnit] = useStorage('ph');
-    const [visibilityUnit] = useStorage('visibility');
-
-    const temp = tempUnit === 'Celsius' ? '℃' : '℉';
-    const humidity = '%';
-    const pressure = pressureUnit === 'kPa' ? 'kPa' : 'Pa';
-    const light = lightUnit === 'lux' ? 'lux' : 'cd/m2';
-    const co2 = co2Unit === 'ppm' ? 'ppm' : 'ppmv';
-    const windSpeed = windSpeedUnit === 'm/s' ? 'm/s' : 'km/h';
-    const soilHumidity = '%'; //localStorage.getItem('soilHumidity') === 'percent' ? '%' : 'g/m3';
-    const ph = phUnit === 'pH' ? 'pH' : 'mol/L';
-    const visibility = visibilityUnit === 'm' ? 'm' : 'km';
     return (
         <Spin loading={loading} style={{width: '100%'}}>
             <Chart
@@ -64,32 +44,6 @@ function PeriodLine({data, loading}: { data: any[]; loading: boolean }) {
                 />
                 <Legend
                     name="name"
-                    itemValue={{
-                        formatter(text) {
-                            switch (text) {
-                                case '温度':
-                                    return temp;
-                                case '湿度':
-                                    return humidity;
-                                case '大气压':
-                                    return pressure;
-                                case '光照强度':
-                                    return light;
-                                case '二氧化碳浓度':
-                                    return co2;
-                                case '风速':
-                                    return windSpeed;
-                                case '土壤湿度':
-                                    return soilHumidity;
-                                case '水质pH值':
-                                    return ph;
-                                case '能见度':
-                                    return visibility;
-                                default:
-                                    return '';
-                            }
-                        },
-                    }}
                     marker={(_, index) => {
                         return {
                             symbol: 'circle',
