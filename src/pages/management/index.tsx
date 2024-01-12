@@ -11,6 +11,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 axios.defaults.baseURL = 'http://bj.memorywzd.tk:9308';
+//axios.defaults.baseURL = 'http://localhost:8080';
 
 export default function Management() {
     const unit = useSelector((state: any) => state.unit);
@@ -28,6 +29,7 @@ export default function Management() {
     const userID = useStorage('userId')[0];
 
     const [comm, setComm] = useState('');
+    const [code, setCode] = useState(2);
 
     function onSubmit() {
         console.log(u, f, a);
@@ -81,7 +83,8 @@ export default function Management() {
                 params: {
                     areaID: area,
                     nodeID: node,
-                    comm: comm,
+                    code: code,
+                    content: comm,
                 },
             });
         console.log(response);
@@ -237,8 +240,13 @@ export default function Management() {
                             </Option>
                         ))}
                     </Select>
+                    指令类型
+                    <Select placeholder='选择指令类型' onChange={setCode} style={{width: 154}}>
+                        <Option key={2} value={2}>设置采样周期</Option>
+                        <Option key={3} value={3}>设置时间</Option>
+                    </Select>
                     <Input placeholder='请输入指令' onChange={setComm}/>
-                    <Button type='primary'>执行</Button>
+                    <Button type='primary' onClick={handleSendComm}>执行</Button>
                 </Space>
             </Card>
         </div>
