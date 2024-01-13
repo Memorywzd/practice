@@ -1,0 +1,5 @@
+PyMySQL~=1.1.0
+fastapi~=0.108.0
+pandas~=2.1.4
+starlette~=0.32.0.post1
+pydantic~=2.5.3
